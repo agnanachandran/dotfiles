@@ -1,0 +1,1 @@
+/Users/chronos/.vim/bundle/ultisnips/ftdetect/UltiSnips.vim
