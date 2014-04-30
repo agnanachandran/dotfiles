@@ -23,6 +23,8 @@ Bundle 'tpope/vim-sensible'
 
 " Ultisnips
 Bundle 'SirVer/ultisnips.git'
+" Snippets for ultisnips
+Plugin 'honza/vim-snippets'
 " Syntax checking upon saving
 Bundle 'scrooloose/syntastic'
 " Quick opening of files
