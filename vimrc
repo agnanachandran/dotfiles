@@ -58,6 +58,8 @@ Plugin 'majutsushi/tagbar'
 Plugin 'vim-ruby/vim-ruby'
 " Rails stuff
 Plugin 'tpope/vim-rails'
+" Scala syntax
+Plugin 'derekwyatt/vim-scala'
 " Typescript syntax
 Plugin 'leafgarland/typescript-vim'
 " HTML5 and erb/eruby stuff
@@ -68,20 +70,26 @@ Plugin 'tpope/vim-ragtag'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 " Better javascript highlighting, indentation
 Bundle "pangloss/vim-javascript"
+" Markdown preview
+Bundle "suan/vim-instant-markdown"
 
 " Potentially good colorschemes:
 " flatcolor
-"
+" codeschool
+" flattr
+
 colorscheme molokai
 
 set tabstop=4
 set shiftwidth=4
-" Set tabstop, shiftwidth, etc. to 2 for ruby, scss, etc.
+
+" Set tabstop, shiftwidth, etc. to 2 for certain filetypes
 autocmd Filetype ruby setlocal ts=2 sts=2 sw=2
 autocmd Filetype scss setlocal ts=2 sts=2 sw=2
 autocmd Filetype sass setlocal ts=2 sts=2 sw=2
 autocmd Filetype html setlocal ts=2 sts=2 sw=2
 autocmd Filetype eruby setlocal ts=2 sts=2 sw=2
+autocmd Filetype scala setlocal ts=2 sts=2 sw=2
 
 "autocmd FileType make set ts=8 sw=8 sts=0 noexpandtab
 
@@ -173,6 +181,9 @@ inoremap <C-space> <C-X><C-O>
 " Remove trailing whitespace on all lines
 nnoremap <silent> <Leader><Leader>w :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
 
+au BufRead,BufNewFile *.ts set filetype=typescript
+au BufRead,BufNewFile *.scala set filetype=scala
+
 " Plugin configuration
 
 " indentLine config
@@ -215,8 +226,8 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:EasyMotion_leader_key = '<leader>'
 
 " YCM (YouCompleteMe) config
-" Toggle syntax/diagnostics check
 
+" Toggle syntax/diagnostics check
 let g:ycm_show_diagnostics_ui = 0
 
 function Enable_diagnostics_mode()
@@ -228,8 +239,8 @@ let g:ycm_complete_in_comments = 1
 let g:ycm_enable_diagnostic_signs = 0
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_auto_trigger = 1
-let g:ycm_key_list_select_completion=['<C-j>', '<Down>']
-let g:ycm_key_list_previous_completion=['<C-k>', '<Up>']
+let g:ycm_key_list_select_completion=['<Tab>', '<Down>']
+let g:ycm_key_list_previous_completion=['<S-tab>', '<Up>']
 
 let g:ycm_autoclose_preview_window_after_completion=1
 
@@ -249,11 +260,12 @@ let delimitMate_matchpairs = "(:),[:],{:}"
 au FileType vim,html let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
 
 " Ultisnips config
-let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsExpandTrigger="<C-j>"
 " JumpForward refers to going to the next placeholder
 " when you've expanded a snippet that has multiple placeholders
-let g:UltiSnipsJumpForwardTrigger="<Tab>"
-let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
-" Set typescript syntax
-au BufRead,BufNewFile *.ts set filetype=typescript
+" Markdown preview config
+let g:instant_markdown_autostart = 0
+
