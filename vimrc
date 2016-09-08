@@ -5,16 +5,15 @@ filetype off " required for vundle
 set encoding=utf-8
 syntax on
 set laststatus=2 " Always show status line
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-cd ~/Documents/projects " Auto change dir upon opening vim
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+cd ~/Documents/ " Auto change dir upon opening vim
 
 " let Vundle (vim plugin manager) manage itself (required)
-Plugin 'gmarik/Vundle'
+" Delete line corresponding to a bundle and run :PluginClean to uninstall
+Plugin 'VundleVim/Vundle.vim'
 
-filetype plugin indent on
-
-" Plugins (delete line corresponding to a bundle and :BundleClean to uninstall)
+" Plugins
 Plugin 'flazz/vim-colorschemes'
 
 " sets several common settings
@@ -25,7 +24,7 @@ Plugin 'SirVer/ultisnips.git'
 " Snippets for ultisnips
 Plugin 'honza/vim-snippets'
 " Quick opening of files
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 " Navigate the file system within vim
 Plugin 'scrooloose/nerdtree'
 " Make NERDTree better
@@ -66,12 +65,19 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'othree/html5.vim'
 " Complete HTML and erb/eruby tags
 Plugin 'tpope/vim-ragtag'
-" Run :PowerlineClearCache after changing Powerline settings
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+" Airline (status bar)
+Plugin 'vim-airline/vim-airline'
 " Better javascript highlighting, indentation
-Bundle "pangloss/vim-javascript"
-" Markdown preview
-Bundle "suan/vim-instant-markdown"
+Plugin 'pangloss/vim-javascript'
+" Better JSX highlighting, indentation
+Plugin 'mxw/vim-jsx'
+" Dash plugin
+Plugin 'rizzatti/dash.vim'
+
+set shell=/bin/bash\ -i
+
+call vundle#end()
+filetype plugin indent on
 
 " Potentially good colorschemes:
 " flatcolor
@@ -85,11 +91,14 @@ set shiftwidth=4
 
 " Set tabstop, shiftwidth, etc. to 2 for certain filetypes
 autocmd Filetype ruby setlocal ts=2 sts=2 sw=2
+autocmd Filetype css setlocal ts=2 sts=2 sw=2
 autocmd Filetype scss setlocal ts=2 sts=2 sw=2
 autocmd Filetype sass setlocal ts=2 sts=2 sw=2
 autocmd Filetype html setlocal ts=2 sts=2 sw=2
 autocmd Filetype eruby setlocal ts=2 sts=2 sw=2
 autocmd Filetype scala setlocal ts=2 sts=2 sw=2
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
+autocmd Filetype snippets setlocal ts=4 sts=4 sw=4
 
 "autocmd FileType make set ts=8 sw=8 sts=0 noexpandtab
 
@@ -114,9 +123,6 @@ set scrolloff=4
 " Set leader to spacebar instead of '\'
 let mapleader=" "
 
-" Reindent entire file
-nmap <c-i> mzgg=G`z
-
 " Map Y to use the same conventions as C, D, etc. (i.e., copy till end of line)
 map Y y$
 
@@ -139,9 +145,6 @@ autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \   exe "normal! g`\"" |
             \ endif
-
-" Make MacVim start at max height/width
-set lines=999 columns=999
 
 " only moves up/down one for wrapped lines
 nnoremap k gk
@@ -199,23 +202,23 @@ nnoremap <C-t> :TagbarToggle<CR><c-w><c-w>
 
 " CtrlP config
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMRU' " most recently updated files are searched
+let g:ctrlp_cmd = 'CtrlPMixed' " Search files, buffers, and recently used files
 let g:ctrlp_show_hidden = 1
-" The regular CtrlP (all files everywhere) and index upon invocation
-nmap <S-space> :CtrlP<CR>
+let g:ctrlp_clear_cache_on_exit = 0
 nnoremap <leader>. :CtrlPTag<CR>
+let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
+if executable('ag')
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
 
-" Powerline options
-let g:Powerline_symbols = 'fancy'
+" Airline options
+let g:airline_powerline_fonts = 1
 
 " Tell vim where to find ctags file
 set tags=./tags,tags;
 
 " SingleCompile config
 nmap gr :SCCompileRun<CR>
-
-" Compile LaTeX
-nnoremap gt :! pdflatex %<CR>
 
 " NERD tree (and tabs) config
 nnoremap <c-n> :NERDTreeTabsToggle<CR>
@@ -226,6 +229,14 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:EasyMotion_leader_key = '<leader>'
 
 " YCM (YouCompleteMe) config
+
+" Go to definition/declaration
+nnoremap gt :YcmCompleter GoTo<CR>
+
+" Turn off YCM
+nnoremap <leader>y :let g:ycm_auto_trigger=0<CR>
+" Turn on YCM
+nnoremap <leader>Y :let g:ycm_auto_trigger=1<CR>
 
 " Toggle syntax/diagnostics check
 let g:ycm_show_diagnostics_ui = 0
@@ -266,6 +277,8 @@ let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<C-j>"
 let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
-" Markdown preview config
-let g:instant_markdown_autostart = 0
+" Where Ultisnips should search for snippets
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "customsnippets"]
 
+" Dash config
+nmap <Leader>d :Dash<CR>
